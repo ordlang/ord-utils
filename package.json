@@ -1,0 +1,17 @@
+{
+  "name": "ord-utils",
+  "version": "0.4.0-draft",
+  "description": "Tools for the Ord specification: ordtest extracts, lints and runs the spec's tests",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "ordtest": "ordtest.mjs"
+  },
+  "files": [
+    "ordtest.mjs"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": "github:ordlang/ord-utils"
+}
