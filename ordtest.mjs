@@ -277,7 +277,7 @@ function checkRange(e, parent, src, say) {
   } else if (e.type === 'item' && e.text) {
     if (e.text.quoted) {
       if (slice.length < 2 || slice[0] !== slice[slice.length - 1] || !QUOTES.includes(slice[0])) say(`range "${slice}" is not the quoted text (D10)`);
-    } else if (parent && parent.type === 'field' && parent.from && parent.key.value === 'state') {
+    } else if (parent && parent.type === 'field' && parent.from && parent.key.value === '_state') {
       if (Array.from(slice).length !== 1) say(`range "${slice}" is not the state marker (D10)`);
     } else if (slice !== e.text.value) say(`range covers "${slice}", not the item "${e.text.value}" (D10)`);
   } else if (e.type === 'label' || e.type === 'empty') {
