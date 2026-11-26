@@ -12,7 +12,7 @@ ordtest extract  SPEC          # all tests as JSON
 ordtest lint     SPEC          # check the tests themselves: blocks, dumps, ranges, JSON
 ordtest coverage SPEC          # rules that no test names, by letter
 ordtest run      SPEC [--dump CMD] [--fmt CMD] [--from-json CMD] [--to-json CMD]
-                      [--from-csv CMD] [--to-csv CMD] [--graph CMD] [--only ID]...
+                      [--from-csv CMD] [--to-csv CMD] [--graph CMD] [--change CMD] [--only ID]...
 ```
 
 `run` gives each test's input on standard input to the command for its kind and compares standard output with the expected output. Tests whose command isn't given are skipped.
