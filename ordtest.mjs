@@ -8,14 +8,15 @@
 //   ordtest lint     SPEC                      check the tests themselves: blocks, dumps, ranges, JSON
 //   ordtest coverage SPEC                      rules that no test names, by letter
 //   ordtest run      SPEC [--dump CMD] [--fmt CMD] [--from-json CMD] [--to-json CMD]
-//                         [--from-csv CMD] [--to-csv CMD] [--graph CMD] [--only ID]...
+//                         [--from-csv CMD] [--to-csv CMD] [--graph CMD] [--change CMD] [--only ID]...
 //
 // run gives each input on standard input to the command for the test's kind and compares
 // standard output with the expected output (T7): byte for byte, or as JSON values for
 // to-json tests. Commands that print a dump (--dump, --from-json, --from-csv) get
 // `--ranges` and `--labels` appended when the test has those options, and --fmt gets
 // `--labels` and, with it, `--today` and the test's date and time, as in
-// `--today 2026-10-15T14:30` (T4). With --fmt, every Ord input is also checked for stable
+// `--today 2026-10-15T14:30` (T4); --graph and --change get --today always (Semantics M70,
+// M94). With --fmt, every Ord input is also checked for stable
 // writing (T5).
 // Tests whose command isn't given are skipped. --only keeps tests that show the given
 // rule ID or have the given number; it can be repeated.
@@ -24,7 +25,7 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 
 const QUOTES = ['`', '"'];
-const KINDS = ['fmt', 'from-json', 'to-json', 'from-csv', 'to-csv', 'graph'];
+const KINDS = ['fmt', 'from-json', 'to-json', 'from-csv', 'to-csv', 'graph', 'change'];
 const OPTIONS = new Set(['ranges', 'labels', ...KINDS]);
 const RULE_ID = /^[A-Z]\d+[a-z]?(\.\d+)?$/;
 const TODAY = /^today:(\d{4}-\d{2}-\d{2})$/;      // T4
@@ -328,10 +329,10 @@ function firstDiff(expected, actual) {
 }
 
 // Dump commands get --ranges and --labels; fmt gets --labels and, with it, --today (T4);
-// graph gets --today (Semantics M70).
+// graph and change get --today (Semantics M70, M94).
 function flagsFor(t) {
   if (t.kind === 'fmt') return fmtFlags(t);
-  if (t.kind === 'graph') return ['--today', `${t.today}T${TIME}`];
+  if (t.kind === 'graph' || t.kind === 'change') return ['--today', `${t.today}T${TIME}`];
   const allowed = DUMP_KINDS.has(t.kind) ? ['ranges', 'labels'] : [];
   return t.options.filter((o) => allowed.includes(o)).map((o) => '--' + o);
 }
